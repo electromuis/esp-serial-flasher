@@ -31,7 +31,7 @@ using namespace std::chrono_literals;
 
 loader_wjwwood_serial_config_t serial_config;
 std::unique_ptr<serial::Serial> serial_port;
-std::chrono::steady_clock::time_point serial_timer;
+std::chrono::high_resolution_clock::time_point serial_timer;
 
 // During the connection process a small delay is needed between write operations.
 static bool write_delay = true;
@@ -62,8 +62,9 @@ void setTimeout(uint32_t timeout)
         loader_port_debug_print("Port not open\n");
         return;
     }
-
-    serial_port->setTimeout(serial::Timeout::simpleTimeout(timeout));
+    
+    auto simple_timeout = serial::Timeout::simpleTimeout(timeout);
+    serial_port->setTimeout(simple_timeout);
     serial_config.timeout = timeout;
 }
 
